@@ -2,6 +2,8 @@
 
 ![Screenshot](screenshot.png)
 
+![Screenshot](screenshot2.png)
+
 ## Features
 - Enter custom length and spacing values to generate a unique arch pattern
 - Renders the arch using a fullscreen turtle canvas
