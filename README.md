@@ -7,9 +7,11 @@
 ## Features
 - Enter custom length and spacing values to generate a unique arch pattern
 - Renders the arch using a fullscreen turtle canvas
-- Input validation — only numbers accepted
+- Input validation — only numbers accepted, empty fields and zero values are caught
 - Re-create arches without restarting the program (keep the turtle window open and switch back to the control panel)
 - Themed UI using the Breeze theme via ttkthemes
+- Animated status label for completion, errors, and invalid input
+- Both windows close together when either is closed
 
 ## Technologies Used
 - Python 3
@@ -33,6 +35,7 @@ pip install numpy ttkthemes
 ## Notes
 - To create a new arch, **do not close the turtle window** — simply bring the control panel back to the front and click Create again
 - Running `arch_library.py` directly will show an error message by design
+- Length and spacing values cannot be 0
 
 ## Author
-Alex
+AlexIsNotInset
