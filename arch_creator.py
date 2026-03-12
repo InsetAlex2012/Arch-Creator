@@ -4,10 +4,30 @@ import turtle, tkinter as tk
 from ttkthemes import ThemedTk
 from tkinter import ttk
 
+# =================================================================
+
+reset_animation = None
+# -----------------------------------------------------------------
 
 def start_creation():
+    global reset_animation
+
     if not length_entry.get() or not spacing_entry.get():
-        title_label.configure(text = "Please fill in all fields", bg = "red", font = ("Rubik Mono One", 16))
+        if reset_animation:
+            root.after_cancel(reset_animation)
+
+        title_label.configure(text="Please fill in all fields", bg="red", font=("Rubik Mono One", 16))
+        reset_animation = root.after(1500, lambda: title_label.configure(text="Arch Creator!", bg="light blue",
+                                                                         font=("Rubik Mono One", 30)))
+        return
+
+    if int(length_entry.get()) == 0 or int(spacing_entry.get()) == 0:
+        if reset_animation:
+            root.after_cancel(reset_animation)
+
+        title_label.configure(text="Values can't be 0!", bg="red", font=("Rubik Mono One", 16))
+        reset_animation = root.after(1500, lambda: title_label.configure(text="Arch Creator!", bg="light blue", font=("Rubik Mono One", 30)))
+
         return
 
     try:
@@ -15,12 +35,18 @@ def start_creation():
 
         turtle_root.getcanvas().winfo_toplevel().deiconify()
 
-        al.create_arch(pen, length = int(length_entry.get()), spacing = int(spacing_entry.get()))
+        create_button.configure(state="disabled")
+        al.create_arch(pen, length=int(length_entry.get()), spacing=int(spacing_entry.get()))
+        create_button.configure(state="normal")
 
+        if reset_animation:
+            root.after_cancel(reset_animation)
 
-    except ImportError:
-        print(
-            "\033[31mLibrary not functioning correctly. Please check if the \"arch_library\" program is installed and in the same directory as the \"arch_creator\" program.\033[0m")
+        title_label.configure(text="Arch Completed!", bg="green", font=("Rubik Mono One", 20))
+        reset_animation = root.after(2000, lambda: title_label.configure(text="Arch Creator!", bg="light blue", font=("Rubik Mono One", 30)))
+
+    except (ImportError, tk.TclError):
+        print("\033[31mLibrary not functioning correctly. Please check if the \"arch_library\" program is installed and in the same directory as the \"arch_creator\" program.\033[0m")
         exit()
 
 # =================================================================
@@ -59,9 +85,19 @@ pen.pencolor("white")
 
 def on_turtle_close():
     turtle.bye()
+    if root.winfo_exists():
+        root.destroy()
+    print("Program force closed.")
+
+def on_root_close():
+    try:
+        turtle.bye()
+    except turtle.Terminator:
+        pass
     root.destroy()
     print("Program force closed.")
 
+root.protocol("WM_DELETE_WINDOW", on_root_close)
 turtle_root.getcanvas().winfo_toplevel().protocol("WM_DELETE_WINDOW", on_turtle_close)
 
 # =================================================================
