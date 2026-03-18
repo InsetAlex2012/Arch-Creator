@@ -6,6 +6,7 @@
 
 ## Features
 - Enter custom length and spacing values to generate a unique arch pattern
+- Choose the corner of the arch: bottom left, bottom right, top left, or top right
 - Renders the arch using a fullscreen turtle canvas
 - Input validation — only numbers accepted, empty fields and zero values are caught
 - Re-create arches without restarting the program (keep the turtle window open and switch back to the control panel)
@@ -38,4 +39,4 @@ pip install numpy ttkthemes
 - Length and spacing values cannot be 0
 
 ## Author
-AlexIsNotInset
+**AlexIsNotInset**
