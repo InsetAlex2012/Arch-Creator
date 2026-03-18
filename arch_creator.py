@@ -17,8 +17,7 @@ def start_creation():
             root.after_cancel(reset_animation)
 
         title_label.configure(text="Please fill in all fields", bg="red", font=("Rubik Mono One", 16))
-        reset_animation = root.after(1500, lambda: title_label.configure(text="Arch Creator!", bg="light blue",
-                                                                         font=("Rubik Mono One", 30)))
+        reset_animation = root.after(1500, lambda: title_label.configure(text="Arch Creator!", bg="light blue", font=("Rubik Mono One", 30)))
         return
 
     if int(length_entry.get()) == 0 or int(spacing_entry.get()) == 0:
@@ -30,13 +29,21 @@ def start_creation():
 
         return
 
+    if not side_box.get():
+        if reset_animation:
+            root.after_cancel(reset_animation)
+        title_label.configure(text="Please select a side!", bg="red", font=("Rubik Mono One", 16))
+        reset_animation = root.after(1500, lambda: title_label.configure(text="Arch Creator!", bg="light blue", font=("Rubik Mono One", 30)))
+
+        return
+
     try:
         import arch_library as al
 
         turtle_root.getcanvas().winfo_toplevel().deiconify()
 
         create_button.configure(state="disabled")
-        al.create_arch(pen, length=int(length_entry.get()), spacing=int(spacing_entry.get()))
+        al.create_arch(pen, length=int(length_entry.get()), spacing=int(spacing_entry.get()), corner = side_box.get())
         create_button.configure(state="normal")
 
         if reset_animation:
@@ -45,8 +52,14 @@ def start_creation():
         title_label.configure(text="Arch Completed!", bg="green", font=("Rubik Mono One", 20))
         reset_animation = root.after(2000, lambda: title_label.configure(text="Arch Creator!", bg="light blue", font=("Rubik Mono One", 30)))
 
-    except (ImportError, tk.TclError):
+
+    except ImportError:
         print("\033[31mLibrary not functioning correctly. Please check if the \"arch_library\" program is installed and in the same directory as the \"arch_creator\" program.\033[0m")
+        exit()
+
+
+    except tk.TclError:
+        print("Program force closed.")
         exit()
 
 # =================================================================
@@ -54,7 +67,7 @@ def start_creation():
 root = ThemedTk(theme = "breeze")
 
 screen_width = 500
-screen_height = 320
+screen_height = 380
 
 screen_width_middle = int(root.winfo_screenwidth() / 2 - screen_width / 2)
 screen_height_middle = int(root.winfo_screenheight() / 2 - screen_height / 2)
@@ -86,6 +99,7 @@ pen.pencolor("white")
 def on_turtle_close():
     turtle.bye()
     if root.winfo_exists():
+        create_button.configure(state="normal")
         root.destroy()
     print("Program force closed.")
 
@@ -135,6 +149,23 @@ spacing_label.pack(side = tk.LEFT)
 
 spacing_entry = ttk.Entry(spacing_frame, validate = "key", validatecommand = vcmd, font = ("Rubik Mono One", 15), width = 10)
 spacing_entry.pack(padx = 30, side = tk.LEFT)
+
+# -----------------------------------------------------------------
+
+side_frame = tk.Frame(root)
+side_frame.pack(pady = 5)
+
+
+side_label = tk.Label(side_frame, text = "Side:", background = "light blue", font = ("Rubik Mono One", 15))
+side_label.pack(side = tk.LEFT)
+
+root.option_add("*TCombobox*Listbox.font", ("Rubik Mono One", 15))
+side_box = ttk.Combobox(side_frame, font = ("Rubik Mono One", 15), width = 12, state = "readonly")
+side_box["values"] = ("Bottom left", "Bottom right", "Top left", "Top right")
+side_box.current(0)
+side_box.pack(padx = 30, side = tk.LEFT)
+
+# -----------------------------------------------------------------
 
 create_button = ttk.Button(root, text = "Create!", style = "TButton", command = start_creation)
 create_button.pack(pady = 20)
