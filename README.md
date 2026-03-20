@@ -7,6 +7,7 @@
 ## Features
 - Enter custom length and spacing values to generate a unique arch pattern
 - Choose the corner of the arch: bottom left, bottom right, top left, or top right
+- Choose a theme for the canvas: Auto (follows system), Dark, or Light
 - Renders the arch using a fullscreen turtle canvas
 - Input validation — only numbers accepted, empty fields and zero values are caught
 - Re-create arches without restarting the program (keep the turtle window open and switch back to the control panel)
@@ -19,13 +20,14 @@
 - `turtle` — arch rendering
 - `tkinter` / `ttk` — control panel UI
 - `ttkthemes` — Breeze theme
+- `darkdetect` — system theme detection
 - `numpy` — arch coordinate calculations
 
 ## How to Run
 1. Make sure both `arch_creator.py` and `arch_library.py` are in the same folder
 2. Install dependencies:
 ```bash
-pip install numpy ttkthemes
+pip install numpy ttkthemes darkdetect
 ```
 3. Run `arch_creator.py`
 
